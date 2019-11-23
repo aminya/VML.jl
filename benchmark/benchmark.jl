@@ -10,7 +10,7 @@ complex = !isempty(ARGS) && ARGS[1] == "complex"
 complex = false
 
 # First generate some random data and test functions in Base on it
-const NVALS = 1_000_000
+const NVALS = 10_000
 base_unary = complex ? base_unary_complex : base_unary_real
 base_binary = complex ? base_binary_complex : base_binary_real
 types = complex ? (Complex64, Complex128) : (Float32, Float64)
