@@ -61,6 +61,13 @@ end
 # do benchmark
 benches = bench(fns, input)
 @save "benchmarkData.jld" benches
+# something is wrong with these
+deleteat!(fns, [18, 31])
+delete!(benches[Float32], :lgamma)
+delete!(benches[Float64], :lgamma)
+delete!(benches[Float32], :log10)
+delete!(benches[Float64], :log10)
+
 ################################################################
 
 """
