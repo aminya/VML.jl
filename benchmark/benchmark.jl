@@ -20,15 +20,15 @@ function bench(fns, input)
     end for t in types]
 end
 
-function ratioci(y, x, alpha=0.05)
+function ratioci(y, x, alpha = 0.05)
     tq² = abs2(quantile(TDist(length(x) + length(y) - 2), alpha))
     μx = mean(x)
     σx² = varm(x, μx)
     μy = mean(y)
     σy² = varm(y, μy)
-    a = sqrt((μx*μy)^2 - (μx^2 - tq²*σx²)*(μy^2 - tq²*σy²))
-    b = μx^2 - tq²*σx²
-    (((μx*μy) - a)/b, ((μx*μy) + a)/b)
+    a = sqrt((μx * μy)^2 - (μx^2 - tq² * σx²) * (μy^2 - tq² * σy²))
+    b = μx^2 - tq² * σx²
+    (((μx * μy) - a) / b, ((μx * μy) + a) / b)
 end
 
 # First generate some random data and test functions in Base on it
