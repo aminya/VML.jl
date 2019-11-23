@@ -12,17 +12,15 @@ benchmark function for VML.jl. Calls both Base and VML functions and stores the 
 """
 function bench(fns, input)
     Dict(t => begin
-        timesBase = Array{BenchmarkTools.Trial}(undef, length(fns))
-        timesVML = Array{BenchmarkTools.Trial}(undef, length(fns))
-        for ifn = 1:length(fns)
-            base_fn = eval(:($(fns[ifn][1]).$(fns[ifn][2])))
-            vml_fn = eval(:(VML.$(fns[ifn][2])))
-            inp = input[t][ifn]
+        Dict( fn[2] => begin
+            base_fn = eval(:($(fn[1]).$(fn[2])))
+            vml_fn = eval(:(VML.$(fn[2])))
             println("benchmarking $vml_fn")
-            timesBase[ifn] = @benchmark $base_fn.($inp...)
-            timesVML[ifn] = @benchmark $vml_fn($inp...)
-        end
-        timesBase, timesVML
+            timesBase = @benchmark $base_fn.($inp...)
+            timesVML = @benchmark $vml_fn($inp...)
+
+            timesBase, timesVML
+        end for (fn, inp) in zip(fns, input[t]) )
     end for t in types)
 end
 
