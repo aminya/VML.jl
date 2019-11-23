@@ -137,7 +137,7 @@ function plotBench()
     # end
     xlims!(0, length(fns) + 1)
     xticks!(1:length(fns)+1, fname, rotation = 70, fontsize = 10)
-    title!("VML Performance for array of size 10_000")
+    title!("VML Performance for array of size $NVALS")
     ylabel!("Relative Speed (VML/Base)")
     hline!([1], line=(4, :dash, 0.6, [:green]), labels = 1)
     savefig("performance$(complex ? "_complex" : "").png")
