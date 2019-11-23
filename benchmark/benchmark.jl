@@ -5,6 +5,12 @@ using Distributions, Plots, BenchmarkTools
 include(joinpath(dirname(dirname(@__FILE__)), "test", "common.jl"))
 complex = !isempty(ARGS) && ARGS[1] == "complex"
 
+
+"""
+    bench(fns, input)
+
+benchmark function for VML.jl. Calls both Base and VML functions and stores the benchmarks. Uses BenchmarkTools
+"""
 function bench(fns, input)
     [t => begin
         timesBase = Array{BenchmarkTools.Trial}(undef, length(fns))
@@ -48,6 +54,8 @@ input = Dict(
 
 fns = [[x[1:2] for x in base_unary_real]; [x[1:2] for x in base_binary_real]]
 
+
+# do benchmark
 builtint, vmlt = bench(fns, input)
 
 
