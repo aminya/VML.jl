@@ -12,6 +12,8 @@ benchmark function for VML.jl. Calls both Base and VML functions and stores the 
 
 # Examples
 ```julia
+fns = [(:Base, :acos); (:Base, :atan); (:SpecialFunctions, :ref)] # array of tuples
+input = Dict( Float64 => [(rand(1000)); (rand(1000), rand(1000)); (rand(1000))]) # Dict of array of tuples
 times = bench(fns, input)
 
 times[Float64][:acos][1] # Base.acos benchmark for Float64
@@ -40,7 +42,7 @@ function ratioci(y, x, alpha = 0.05)
     σy² = varm(y, μy)
     a = sqrt((μx * μy)^2 - (μx^2 - tq² * σx²) * (μy^2 - tq² * σy²))
     b = μx^2 - tq² * σx²
-    (((μx * μy) - a) / b, ((μx * μy) + a) / b)
+    return (((μx * μy) - a) / b, ((μx * μy) + a) / b)
 end
 
 # First generate some random data and test functions in Base on it
