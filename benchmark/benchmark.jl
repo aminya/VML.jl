@@ -49,20 +49,20 @@ base_unary = complex ? base_unary_complex : base_unary_real
 base_binary = complex ? base_binary_complex : base_binary_real
 types = complex ? (Complex64, Complex128) : (Float32, Float64)
 
+# arrays of inputs are stored in a Tuple. So later for calling use inp... to get the content of the Tuple
 input = Dict( t =>
 [
  [(randindomain(t, NVALS, domain),) for (_, _, domain) in base_unary];
  [(randindomain(t, NVALS, domain1), randindomain(t, NVALS, domain2)) for (_, _, domain1, domain2) in base_binary];
- (randindomain(t, NVALS, (0, 100)), randindomain(t, 1, (-1, 20))[1])
+ # (randindomain(t, NVALS, (0, 100)), randindomain(t, 1, (-1, 20))[1])
 ]
     for t in types)
 
 fns = [[x[1:2] for x in base_unary_real];
        [x[1:2] for x in base_binary_real]]
 
-
 # do benchmark
-builtint, vmlt = bench(fns, input)
+times = bench(fns[1:2], input)
 
 
 # Print ratio
