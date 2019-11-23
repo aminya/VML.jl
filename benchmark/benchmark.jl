@@ -12,7 +12,7 @@ complex = !isempty(ARGS) && ARGS[1] == "complex"
 benchmark function for VML.jl. Calls both Base and VML functions and stores the benchmarks. Uses BenchmarkTools
 """
 function bench(fns, input)
-    [t => begin
+    Dict(t => begin
         timesBase = Array{BenchmarkTools.Trial}(undef, length(fns))
         timesVML = Array{BenchmarkTools.Trial}(undef, length(fns))
         for ifn = 1:length(fns)
@@ -23,7 +23,7 @@ function bench(fns, input)
             timesVML[ifn] = @benchmark $vml_fn($inp...)
         end
         timesBase, timesVML
-    end for t in types]
+    end for t in types)
 end
 
 function ratioci(y, x, alpha = 0.05)
