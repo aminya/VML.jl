@@ -1,5 +1,6 @@
-using Distributions, PyCall, PyPlot
-@pyimport matplotlib.gridspec as gridspec
+using VML
+using Distributions, Plots, BenchmarkTools
+
 
 include(joinpath(dirname(dirname(@__FILE__)), "test", "common.jl"))
 complex = !isempty(ARGS) && ARGS[1] == "complex"
