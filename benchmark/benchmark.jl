@@ -59,39 +59,53 @@ input = Dict( t =>
  # (randindomain(t, NVALS, (0, 100)), randindomain(t, 1, (-1, 20))[1])
 ]
     for t in types)
-
-fns = [[x[1:2] for x in base_unary_real];
-       [x[1:2] for x in base_binary_real]]
-
-# do benchmark
-times = bench(fns[1:2], input)
-
+# plot function
+function plotBench()
 
 # Print ratio
-clf()
-colors = ["r", "y"]
-for itype = 1:length(types)
-    builtint = builtin[types[itype]]
-    vmlt = vml[types[itype]]
-    μ = vec(map(mean, builtint)./map(mean, vmlt))
-    ci = zeros(Float64, 2, length(fns))
-    for ifn = 1:length(builtint)
-        lower, upper = ratioci(builtint[ifn], vmlt[ifn])
-        ci[1, ifn] = μ[ifn] - lower
-        ci[2, ifn] = upper - μ[ifn]
+    colors = [:blue, :red]
+    for itype = 1:length(types)
+
+        # creating arrays of times from benchmarks
+        benchVals = collect(values(benches[types[itype]]))
+        builtint = [x[1].times for x in benchVals]
+        vmlt = [x[2].times for x in benchVals]
+
+        # calculating mean of run times
+        μ = vec(map(mean, builtint) ./ map(mean, vmlt))
+
+        # calculating error bars
+        ci = zeros(Float64, 2, length(fns))
+        for ifn = 1:length(builtint)
+            lower, upper = ratioci(builtint[ifn], vmlt[ifn])
+            ci[1, ifn] = μ[ifn] - lower
+            ci[2, ifn] = upper - μ[ifn]
+        end
+
+        # adding bar
+        b = bar!(
+            0.2+(0.4*itype):length(fns[1:2]),
+            μ,
+            # yerror = ci, # error bar disabled
+            fillcolor = colors[itype],
+            labels = [string(x) for x in types],
+        )
     end
-    bar(0.2+(0.4*itype):length(fns), μ, 0.4, yerr=ci, color=colors[itype], ecolor="k")
+    fname = [string(fn[2]) for fn in fns]
+    if !complex
+        fname[end-1] = "A.^B"
+        fname[end] = "A.^b"
+    end
+    xlims!(0, length(fns) + 1)
+    xticks!(1:length(fns)+1, fname, rotation = 70, fontsize = 10)
+    title!("VML Performance")
+    ylabel!("Relative Speed (Base/VML)")
+    hline!([1], line=(4, :dash, 0.6, [:green]), labels = nothing)
+    savefig("performance$(complex ? "_complex" : "").png")
+
 end
-ax = gca()
-ax[:set_xlim](0, length(fns)+1)
-fname = [string(fn.env.name) for fn in fns]
-if !complex
-    fname[end-1] = "A.^B"
-    fname[end] = "A.^b"
-end
-xticks(1:length(fns)+1, fname, rotation=70, fontsize=10)
-title("VML Performance")
-ylabel("Relative Speed (Base/VML)")
-legend([string(x) for x in types])
-ax[:axhline](1; color="black", linestyle="--")
-savefig("performance$(complex ? "_complex" : "").png")
+
+################################################################
+
+# do plotting
+plotBench()
