@@ -107,6 +107,7 @@ function plotBench()
             # yerror = ci, # error bar disabled
             fillcolor = colors[itype],
             labels = [string(x) for x in types],
+            dpi = 600
         )
     end
     fname = [string(fn[2]) for fn in fns]
