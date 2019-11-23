@@ -8,7 +8,15 @@ complex = !isempty(ARGS) && ARGS[1] == "complex"
 """
     bench(fns, input)
 
-benchmark function for VML.jl. Calls both Base and VML functions and stores the benchmarks. Uses BenchmarkTools
+benchmark function for VML.jl. Calls both Base and VML functions and stores the benchmarks in two nested Dict. First layer specifies type, and second layer specifies the function name. The result is a Tuple, 1st element being benchmark for Base/SpecialFunctions and 2nd element being for VML.
+
+# Examples
+```julia
+times = bench(fns, input)
+
+times[Float64][:acos][1] # Base.acos benchmark for Float64
+times[Float64][:acos][2] # VML.acos benchmark for Float64
+```
 """
 function bench(fns, input)
     Dict(t => begin
