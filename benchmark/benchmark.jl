@@ -60,7 +60,12 @@ end
 
 # do benchmark
 benches = bench(fns, input)
+
 @save "benchmarkData.jld" benches
+
+# benches = load("benchmarkData.jld2", "benches")
+
+
 # something is wrong with these
 deleteat!(fns, [18, 31])
 delete!(benches[Float32], :lgamma)
