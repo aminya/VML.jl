@@ -7,6 +7,7 @@ include(joinpath(dirname(dirname(@__FILE__)), "test", "common.jl"))
 
 ################################################################
 complex = !isempty(ARGS) && ARGS[1] == "complex"
+complex = false
 
 # First generate some random data and test functions in Base on it
 const NVALS = 1_000_000
@@ -62,7 +63,9 @@ benches = bench(fns, input)
 @save "benchmarkData.jld" benches
 ################################################################
 
-# benchmark analysis function
+"""
+benchmark analysis function
+"""
 function ratioci(y, x, alpha = 0.05)
     tq² = abs2(quantile(TDist(length(x) + length(y) - 2), alpha))
     μx = mean(x)
@@ -76,7 +79,9 @@ end
 
 ################################################################
 
-# plot function
+"""
+Does analysis of the benchmark data and plots them as bars.
+"""
 function plotBench()
 
 # Print ratio
