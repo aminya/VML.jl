@@ -1,5 +1,7 @@
 using VML
-using Distributions, Statistics, Plots, BenchmarkTools
+using Distributions, Statistics, BenchmarkTools # for benchmark
+using Plots # for plotting
+using JLD2, FileIO # to save file
 
 include(joinpath(dirname(dirname(@__FILE__)), "test", "common.jl"))
 
@@ -57,7 +59,8 @@ end
 
 # do benchmark
 benches = bench(fns[1:2], input)
-
+benches = bench(fns, input)
+@save "benchmarkData.jld" benches
 ################################################################
 
 # benchmark analysis function
