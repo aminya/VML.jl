@@ -18,6 +18,7 @@ function bench(fns, input)
             base_fn = eval(:($(fns[ifn][1]).$(fns[ifn][2])))
             vml_fn = eval(:(VML.$(fns[ifn][2])))
             inp = input[t][ifn]
+            println("benchmarking $vml_fn")
             timesBase[ifn] = @benchmark $base_fn.($inp...)
             timesVML[ifn] = @benchmark $vml_fn($inp...)
         end
