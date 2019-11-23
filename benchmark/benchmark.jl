@@ -62,6 +62,7 @@ end
 benches = bench(fns, input)
 
 @save "benchmarkData.jld" benches
+# @save "benchmarkData-complex.jld" benches
 
 # benches = load("benchmarkData.jld2", "benches")
 
@@ -129,10 +130,10 @@ function plotBench()
         )
     end
     fname = [string(fn[2]) for fn in fns]
-    if !complex
-        fname[end-1] = "A.^B"
-        fname[end] = "A.^b"
-    end
+    # if !complex
+    #     fname[end-1] = "A.^B"
+    #     fname[end] = "A.^b"
+    # end
     xlims!(0, length(fns) + 1)
     xticks!(1:length(fns)+1, fname, rotation = 70, fontsize = 10)
     title!("VML Performance")
