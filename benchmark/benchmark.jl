@@ -58,7 +58,6 @@ end
 ################################################################
 
 # do benchmark
-benches = bench(fns[1:2], input)
 benches = bench(fns, input)
 @save "benchmarkData.jld" benches
 ################################################################
@@ -101,8 +100,8 @@ function plotBench()
         end
 
         # adding bar
-        b = bar!(
-            0.2+(0.4*itype):length(fns[1:2]),
+        plt = bar!(
+            0.2+(0.4*itype):length(fns),
             μ,
             # yerror = ci, # error bar disabled
             fillcolor = colors[itype],
