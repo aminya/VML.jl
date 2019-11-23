@@ -3,6 +3,7 @@ using Distributions, Statistics, BenchmarkTools # for benchmark
 using Plots # for plotting
 using JLD2, FileIO # to save file
 
+cd(dirname(@__FILE__))
 include(joinpath(dirname(dirname(@__FILE__)), "test", "common.jl"))
 
 ################################################################
