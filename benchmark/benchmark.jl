@@ -96,19 +96,21 @@ function plotBench()
         # calculating mean of run times
         μ = vec(map(mean, builtint) ./ map(mean, vmlt))
 
-        # calculating error bars
-        ci = zeros(Float64, 2, length(fns))
-        for ifn = 1:length(builtint)
-            lower, upper = ratioci(builtint[ifn], vmlt[ifn])
-            ci[1, ifn] = μ[ifn] - lower
-            ci[2, ifn] = upper - μ[ifn]
-        end
+        # error bar disabled because benchmark tools takes care of errors
+
+        # # calculating error bars
+        # ci = zeros(Float64, 2, length(fns))
+        # for ifn = 1:length(builtint)
+        #     lower, upper = ratioci(builtint[ifn], vmlt[ifn])
+        #     ci[1, ifn] = μ[ifn] - lower
+        #     ci[2, ifn] = upper - μ[ifn]
+        # end
 
         # adding bar
         plt = bar!(
             0.2+(0.4*itype):length(fns),
             μ,
-            # yerror = ci, # error bar disabled
+            # yerror = ci,
             fillcolor = colors[itype],
             labels = [string(x) for x in types],
             dpi = 600
