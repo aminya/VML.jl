@@ -6,25 +6,17 @@ include(joinpath(dirname(dirname(@__FILE__)), "test", "common.jl"))
 complex = !isempty(ARGS) && ARGS[1] == "complex"
 
 function bench(fns, input)
-    [t=>begin
-        times = Array(Vector{Float64}, length(fns))
+    [t => begin
+        timesBase = Array{BenchmarkTools.Trial}(undef, length(fns))
+        timesVML = Array{BenchmarkTools.Trial}(undef, length(fns))
         for ifn = 1:length(fns)
-            fn = fns[ifn]
+            base_fn = eval(:($(fns[ifn][1]).$(fns[ifn][2])))
+            vml_fn = eval(:(VML.$(fns[ifn][2])))
             inp = input[t][ifn]
-            fn(inp...)
-            gc()
-            nrep = max(iceil(2/(@elapsed (gc_disable(); fn(inp...); gc_enable(); gc()))), 3)
-            println("Running $nrep reps of $fn($t)")
-            @time times[ifn] = [begin
-                gc()
-                gc_disable()
-                time = @elapsed fn(inp...)
-                gc_enable()
-                time
-            end for i = 1:nrep]
-            # println((mean(times[ifn]), std(times[ifn])))
+            timesBase[ifn] = @benchmark $base_fn.($inp...)
+            timesVML[ifn] = @benchmark $vml_fn($inp...)
         end
-        times
+        timesBase, timesVML
     end for t in types]
 end
 
