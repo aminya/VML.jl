@@ -23,7 +23,7 @@ function bench(fns, input)
         Dict( fn[2] => begin
             base_fn = eval(:($(fn[1]).$(fn[2])))
             vml_fn = eval(:(VML.$(fn[2])))
-            println("benchmarking $vml_fn")
+            println("benchmarking $vml_fn for type $t")
             timesBase = @benchmark $base_fn.($inp...)
             timesVML = @benchmark $vml_fn($inp...)
 
