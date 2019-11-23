@@ -37,7 +37,6 @@ base_unary = complex ? base_unary_complex : base_unary_real
 base_binary = complex ? base_binary_complex : base_binary_real
 types = complex ? (Complex64, Complex128) : (Float32, Float64)
 
-builtin = bench(fns, input)
 input = Dict(
     t =>
 [
@@ -47,11 +46,10 @@ input = Dict(
 ]
     for t in types)
 
-# Now with VML
-using VML
 fns = [[x[1:2] for x in base_unary_real]; [x[1:2] for x in base_binary_real]]
 
-vml = bench(fns, input)
+builtint, vmlt = bench(fns, input)
+
 
 # Print ratio
 clf()
