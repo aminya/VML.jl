@@ -36,14 +36,17 @@ const NVALS = 1_000_000
 base_unary = complex ? base_unary_complex : base_unary_real
 base_binary = complex ? base_binary_complex : base_binary_real
 types = complex ? (Complex64, Complex128) : (Float32, Float64)
-input = [t=>[[(randindomain(t, NVALS, domain),) for (fn, domain) in base_unary];
-             [(randindomain(t, NVALS, domain1), randindomain(t, NVALS, domain2))
-              for (fn, domain1, domain2) in base_binary];
-             (randindomain(t, NVALS, (0, 100)), randindomain(t, 1, (-1, 20))[1])]
-            for t in types]
 fns = [[x[1] for x in base_unary]; [x[1] for x in base_binary]; (complex ? [] : .^)]
 
 builtin = bench(fns, input)
+input = Dict(
+    t =>
+[
+ [(randindomain(t, NVALS, domain),) for (_, _, domain) in base_unary];
+ [(randindomain(t, NVALS, domain1), randindomain(t, NVALS, domain2)) for (_, _, domain1, domain2) in base_binary];
+ (randindomain(t, NVALS, (0, 100)), randindomain(t, 1, (-1, 20))[1])
+]
+    for t in types)
 
 # Now with VML
 using VML
